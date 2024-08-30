@@ -30,7 +30,6 @@ public class TokenService {
         } catch (RuntimeException e) {
             throw new AccessTokenValidException("AccessToken 유효성 검사 실패");
         }
-
         return true;
     }
 }

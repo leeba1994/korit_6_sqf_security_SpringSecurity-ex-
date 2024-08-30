@@ -5,13 +5,15 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.study.SpringSecurityMybatis.repository.UserMapper">
+    <!--    리턴 타입이 user 엔티티인 resultMap-->
     <resultMap id="userResultMap" type="com.study.SpringSecurityMybatis.entity.User">
-        <id property="id" column="user_id" />
+        <id property="id" column="user_id"/>
         <result property="username" column="username" />
         <result property="password" column="password" />
         <result property="name" column="name" />
         <result property="email" column="email" />
         <collection property="userRoles" javaType="java.util.Set" resultMap="userRolesResultMap" />
+<!--        userRolesResultMap의 resultMap이 set 형태로 userRoles에 들어간다-->
     </resultMap>
 
     <resultMap id="userRolesResultMap" type="com.study.SpringSecurityMybatis.entity.UserRoles">
@@ -35,23 +37,23 @@
     </delete>
 
     <select id="findByUsername" resultMap="userResultMap">
-        select
-            u.id as user_id,
-            u.username,
-            u.password,
-            u.name,
-            u.email,
-            ur.id as user_roles_id,
-            ur.user_id as ur_user_id,
-            ur.role_id as ur_role_id,
-            r.id as role_id,
-            r.name as role_name
-        from
-            user u
-            left outer join user_roles ur on(ur.user_id = u.id)
-            left outer join role r on(r.id = ur.role_id)
-        where
-            username = #{username}
+            select
+                u.id as user_id,
+                u.username,
+                u.password,
+                u.name,
+                u.email,
+                ur.id as user_roles_id,
+                ur.user_id as ur_user_id,
+                ur.role_id as ur_role_id,
+                r.id as role_id,
+                r.name as role_name
+            from
+                user u
+                left outer join user_roles ur on(ur.user_id = u.id)
+                left outer join role r on(r.id = ur.role_id)
+            where
+                username = #{username}
     </select>
 
     <select id="findById" resultMap="userResultMap">

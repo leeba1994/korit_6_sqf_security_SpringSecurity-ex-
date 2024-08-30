@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 import java.util.Set;
 
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class User {
     private Long id;
@@ -31,11 +31,3 @@ public class User {
                 .build();
     }
 }
-
-
-
-
-
-
-
-

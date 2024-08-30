@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -35,7 +34,7 @@ public class JwtAccessTokenFilter extends GenericFilter {
         if(bearerAccessToken == null || bearerAccessToken.isBlank()) {
             filterChain.doFilter(servletRequest, servletResponse);
             return;
-        }
+       }
 
         String accessToken = jwtProvider.removeBearer(bearerAccessToken);
         Claims claims = null;
@@ -43,19 +42,18 @@ public class JwtAccessTokenFilter extends GenericFilter {
             claims = jwtProvider.getClaims(accessToken);
             Long userId = ((Integer) claims.get("userId")).longValue();
             User user = userMapper.findById(userId);
-            if(user == null) {
-                throw new JwtException("해당 ID(" + userId + ")의 사용자 정보를 찾지 못했습니다.");
+            if(user == null) { //토큰은 유효하지만 계정은 삭제된 상황
+                throw new JwtException("해당 ID(" + userId + ")의 사용자 정보를 찾지 못했습니다");
             }
             PrincipalUser principalUser = user.toPrincipal();
             Authentication authentication = new UsernamePasswordAuthenticationToken(principalUser, null, principalUser.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (JwtException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // 서버측에서 콘솔에 오류를 띄움.
             filterChain.doFilter(servletRequest, servletResponse);
             return;
         }
 
         filterChain.doFilter(servletRequest, servletResponse);
     }
-
 }

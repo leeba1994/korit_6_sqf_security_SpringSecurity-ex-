@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { Link, useNavigate } from 'react-router-dom';
-import { signupApi } from '../../apis/signupApi';
+import { signupApi } from '../../apis/SignupApi';
 
 const layout = css`
     display: flex;
@@ -14,7 +14,7 @@ const layout = css`
 const logo = css`
     font-size: 24px;
     margin-bottom: 40px;
-`
+`;
 
 const joinInfoBox = css`
     display: flex;
@@ -58,15 +58,15 @@ const joinInfoBox = css`
 `;
 
 const joinButton = css`
-    border: none;
-    border-radius: 10px;
-    width: 100%;
-    height: 50px;
-    background-color: #999999;
-    color: #ffffff;
-    font-size: 18px;
-    font-weight: 600;
-    cursor: pointer;
+  border: none;
+  border-radius: 10px;
+  width: 100% ;
+  height: 50px;
+  background-color: #999999;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
 `;
 
 function UserJoinPage(props) {
@@ -77,7 +77,7 @@ function UserJoinPage(props) {
         password: "",
         checkPassword: "",
         name: "",
-        email: ""
+        email: "",
     });
 
     const [ fieldErrorMessages, setFieldErrorMessages ] = useState({
@@ -86,67 +86,68 @@ function UserJoinPage(props) {
         checkPassword: <></>,
         name: <></>,
         email: <></>,
-    }); 
+    });
 
-    const handleInputUserOnChange = (e) => {
-        setInputUser(inputUser => ({
-            ...inputUser,
-            [e.target.name]: e.target.value
-        }));
+const handleInputUserOnChange = (e) => {
+    setInputUser(inputUser => ({
+        ...inputUser,
+        [e.target.name]: e.target.value
+    }));
+}
+
+const handleJoinSubmitOnClick = async () => {
+    const signupData = await signupApi(inputUser);
+    if(!signupData.isSuccess) {
+        showFieldErrorMessage(signupData.fieldErrors);
+        return;
     }
 
-    const handleJoinSubmitOnClick = async () => {
-        const signupData = await signupApi(inputUser);
-        if(!signupData.isSuceess) {
-            showFieldErrorMessage(signupData.fieldErrors);
-            return;
+    alert(`${signupData.ok.message}`);
+    navigate("/user/login");
+}
+
+const showFieldErrorMessage = (fieldErrors) => {
+    let EmptyFieldErrors = {
+        username: <></>,
+        password: <></>,
+        checkPassword: <></>,
+        name: <></>,
+        email: <></>,
+    };
+
+    for(let fieldError of fieldErrors) { //fieldErrors 안에 있는 field와 defaultMessage를 꺼내서 EmptyFieldErrors에 넣어준다.
+        EmptyFieldErrors = {
+            ...EmptyFieldErrors,
+            [fieldError.field]: <p>{fieldError.defaultMessage}</p>,
         }
-
-        alert(`${signupData.ok.message}`);
-        navigate("/user/login");
     }
 
-    const showFieldErrorMessage = (fieldErrors) => {
-        let EmptyFieldErrors = {
-            username: <></>,
-            password: <></>,
-            checkPassword: <></>,
-            name: <></>,
-            email: <></>,
-        };
-
-        for(let fieldError of fieldErrors) {
-            EmptyFieldErrors = {
-                ...EmptyFieldErrors,
-                [fieldError.field]: <p>{fieldError.defaultMessage}</p>,
-            }
-        }
-
-        setFieldErrorMessages(EmptyFieldErrors);
-    }
+    setFieldErrorMessages(EmptyFieldErrors);
+    return;
+}
 
     return (
         <div css={layout}>
             <Link to={"/"}><h1 css={logo}>사이트 로고</h1></Link>
             <div css={joinInfoBox}>
                 <div>
-                    <input type="text" name='username' onChange={handleInputUserOnChange} value={inputUser.username} placeholder='아이디'/>
+                    <input type="text" name='username' onChange={handleInputUserOnChange} value={inputUser.username}placeholder='아이디' />
                     {fieldErrorMessages.username}
                 </div>
                 <div>
-                    <input type="password" name='password' onChange={handleInputUserOnChange} value={inputUser.password} placeholder='비밀번호'/>
+                    <input type="password" name='password' onChange={handleInputUserOnChange} value={inputUser.password}placeholder='비밀번호' />
                     {fieldErrorMessages.password}
                 </div>
                 <div>
-                    <input type="password" name='checkPassword' onChange={handleInputUserOnChange} value={inputUser.checkPassword} placeholder='비밀번호 확인'/>
+                    <input type="password" name='checkPassword' onChange={handleInputUserOnChange} value={inputUser.checkPassword}placeholder='비밀번호 확인' />
                     {fieldErrorMessages.checkPassword}
                 </div>
                 <div>
-                    <input type="text" name='name' onChange={handleInputUserOnChange} value={inputUser.name} placeholder='성명'/>
+                    <input type="text" name='name' onChange={handleInputUserOnChange} value={inputUser.name}placeholder='성명' />
                     {fieldErrorMessages.name}
                 </div>
                 <div>
-                    <input type="email" name='email' onChange={handleInputUserOnChange} value={inputUser.email} placeholder='이메일주소'/>
+                    <input type="email" name='email' onChange={handleInputUserOnChange} value={inputUser.email}placeholder='이메일 주소' />
                     {fieldErrorMessages.email}
                 </div>
             </div>

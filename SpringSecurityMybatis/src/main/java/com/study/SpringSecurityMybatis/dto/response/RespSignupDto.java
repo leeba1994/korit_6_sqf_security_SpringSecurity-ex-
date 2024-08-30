@@ -4,8 +4,8 @@ import com.study.SpringSecurityMybatis.entity.User;
 import lombok.Builder;
 import lombok.Data;
 
-@Builder
 @Data
+@Builder
 public class RespSignupDto {
     private String message;
     private User user;

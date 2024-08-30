@@ -17,6 +17,13 @@
             name = #{name}
     </select>
 
+    <insert id="save"
+            useGeneratedKeys="true"
+            keyProperty="id">
+        insert into role
+        values(default, #{name})
+    </insert>
+
     <select id="findById"
             resultType="com.study.SpringSecurityMybatis.entity.Role">
         select
@@ -27,10 +34,5 @@
         where
             id = #{id}
     </select>
-
-    <insert id="save" useGeneratedKeys="true" keyProperty="id">
-        insert into role
-        values(default, #{name})
-    </insert>
 
 </mapper>

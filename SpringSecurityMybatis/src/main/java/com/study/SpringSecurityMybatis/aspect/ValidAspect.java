@@ -21,46 +21,48 @@ public class ValidAspect {
     private UserService userService;
 
     @Pointcut("@annotation(com.study.SpringSecurityMybatis.aspect.annotation.ValidAop)")
-    private void pointCut() {}
+    private void pointcut() {}
 
-    @Around("pointCut()")
-    public Object around(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+    @Around("pointcut()")
+    private Object around(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+
         Object[] args = proceedingJoinPoint.getArgs();
+
         BindingResult bindingResult = null;
 
         for(Object arg : args) {
             if(arg.getClass() == BeanPropertyBindingResult.class) {
                 bindingResult = (BeanPropertyBindingResult) arg;
+                break;
             }
         }
 
         switch (proceedingJoinPoint.getSignature().getName()) {
-            case "signup":
-                validSignupDto(args, bindingResult);
+            case "signup" :
+                validSignpuDto(args, bindingResult);
                 break;
         }
 
         if(bindingResult.hasErrors()) {
-            throw new ValidException("유효성 검사 오류", bindingResult.getFieldErrors());
+            throw new ValidException("유효성 검사 실패", bindingResult.getFieldErrors());
         }
 
         return proceedingJoinPoint.proceed();
+
     }
 
-    private void validSignupDto(Object[] args, BindingResult bindingResult) {
+    private void validSignpuDto(Object[] args, BindingResult bindingResult) {
         for(Object arg : args) {
             if(arg.getClass() == ReqSignupDto.class) {
                 ReqSignupDto dto = (ReqSignupDto) arg;
-
                 if(!dto.getPassword().equals(dto.getCheckPassword())) {
                     FieldError fieldError
                             = new FieldError("checkPassword", "checkPassword", "비밀번호가 일치하지 않습니다.");
                     bindingResult.addError(fieldError);
                 }
-
                 if(userService.isDuplicateUsername(dto.getUsername())) {
                     FieldError fieldError
-                            = new FieldError("username", "username", "이미 존재하는 사용자이름입니다.");
+                            = new FieldError("username", "username", "이미 존재하는 사용자 이름입니다.");
                     bindingResult.addError(fieldError);
                 }
             }

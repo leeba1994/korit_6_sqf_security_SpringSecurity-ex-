@@ -8,7 +8,6 @@ import com.study.SpringSecurityMybatis.dto.response.RespSignupDto;
 import com.study.SpringSecurityMybatis.entity.Role;
 import com.study.SpringSecurityMybatis.entity.User;
 import com.study.SpringSecurityMybatis.entity.UserRoles;
-import com.study.SpringSecurityMybatis.exception.DeleteUserException;
 import com.study.SpringSecurityMybatis.exception.SignupException;
 import com.study.SpringSecurityMybatis.repository.RoleMapper;
 import com.study.SpringSecurityMybatis.repository.UserMapper;
@@ -19,16 +18,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.Option;
 import java.sql.SQLException;
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -46,10 +42,10 @@ public class UserService {
     private JwtProvider jwtProvider;
 
     public Boolean isDuplicateUsername(String username) {
-        return Optional.ofNullable(userMapper.findByUsername(username)).isPresent();
+        return userMapper.findByUsername(username) != null; // Optional.ofNullable(userMapper.findByUsername(username)).isPresent();
     }
 
-    @Transactional(rollbackFor = SignupException.class)
+    @Transactional(rollbackFor = SignupException.class) // 이 메서드 안에서 SignupException 예외가 터지면 바로 rollback 한다.
     public RespSignupDto insertUserAndUserRoles(ReqSignupDto dto) throws SignupException {
         User user = null;
         try {
@@ -72,7 +68,7 @@ public class UserService {
 
             user.setUserRoles(Set.of(userRoles));
         } catch (Exception e) {
-            throw new SignupException(e.getMessage());
+            throw new SignupException("회원가입 중 오류 발생");
         }
 
         return RespSignupDto.builder()
@@ -83,6 +79,7 @@ public class UserService {
 
     public RespSigninDto getGeneratedAccessToken(ReqSigninDto dto) {
         User user = checkUsernameAndPassword(dto.getUsername(), dto.getPassword());
+        jwtProvider.generateAccessToken(user);
 
         return RespSigninDto.builder()
                 .expireDate(jwtProvider.getExpireDate().toLocaleString())
@@ -94,11 +91,11 @@ public class UserService {
         User user = userMapper.findByUsername(username);
 
         if(user == null) {
-            throw new UsernameNotFoundException("사용장 정보를 다시 확인하세요.");
+            throw new UsernameNotFoundException("사용자 정보를 다시 확인하세요.");
         }
 
         if(!passwordEncoder.matches(password, user.getPassword())) {
-            throw new BadCredentialsException("사용장 정보를 다시 확인하세요.");
+            throw new BadCredentialsException("사용자 정보를 다시 확인하세요.");
         }
 
         return user;
@@ -106,18 +103,18 @@ public class UserService {
 
     @Transactional(rollbackFor = SQLException.class)
     public RespDeleteUserDto deleteUser(Long id) {
-        User user = null;
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        PrincipalUser principalUser = (PrincipalUser) authentication.getPrincipal();
-        if(principalUser.getId() != id) {
-            throw new AuthenticationServiceException("삭제 할 수 있는 권한이 없습니다.");
-        }
-        user = userMapper.findById(id);
-        if(user == null) {
-            throw new AuthenticationServiceException("해당 사용자는 존재하지 않는 사용자입니다.");
-        }
-        userRolesMapper.deleteByUserId(id);
-        userMapper.deleteById(id);
+            User user = null;
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            PrincipalUser principalUser = (PrincipalUser) authentication.getPrincipal();
+            if(principalUser.getId() != id) {
+                throw new AuthenticationServiceException("삭제 할 수 있는 권한이 없습니다.");
+            }
+            user = userMapper.findById(id);
+            if(user == null) {
+                throw new AuthenticationServiceException("해당 사용자는 존재하지 않는 사용자입니다.");
+            }
+            userRolesMapper.deleteByUserId(id);
+            userMapper.deleteById(id);
 
         return RespDeleteUserDto.builder()
                 .isDeleting(true)

@@ -19,11 +19,11 @@ public class JwtProvider {
     private final Key key;
 
     public JwtProvider(@Value("${jwt.secret}") String secret) {
-        this.key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
+        this.key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret)); // yml secret 문자열을 바이트 코드로 변환하여 key 값을 설정한다.
     }
 
     public Date getExpireDate() {
-        return new Date(new Date().getTime() + (1000l * 60 * 60 * 24 * 30));
+        return new Date(new Date().getTime() + (1000L * 60 * 60 * 24 * 30));
     }
 
     public String generateAccessToken(User user) {
@@ -40,9 +40,9 @@ public class JwtProvider {
     }
 
     public Claims getClaims(String token) {
-        JwtParser jwtParser = Jwts.parser()
+        JwtParser jwtParser = Jwts.parser() // parser에 parsing을 할때 쓸 키를 주고 parser를 만든다.
                 .setSigningKey(key)
                 .build();
-        return  jwtParser.parseClaimsJws(token).getPayload();
+        return jwtParser.parseClaimsJws(token).getPayload(); // parsing된 jwt 토큰에서 payload 안에 있는 claims를 리턴
     }
 }

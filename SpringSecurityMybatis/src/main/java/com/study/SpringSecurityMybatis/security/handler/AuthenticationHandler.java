@@ -18,7 +18,6 @@ public class AuthenticationHandler implements AuthenticationEntryPoint {
         response.setCharacterEncoding("UTF-8");
         response.setStatus(403);
         response.getWriter().println("인증 토큰이 유효하지 않습니다.");
-        authException.printStackTrace();
+        authException.printStackTrace(); //서버측에서 콘솔에 오류를 띄움.
     }
-
 }

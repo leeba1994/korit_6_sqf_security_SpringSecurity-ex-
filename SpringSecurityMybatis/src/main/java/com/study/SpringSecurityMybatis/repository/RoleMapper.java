@@ -7,5 +7,4 @@ import org.apache.ibatis.annotations.Mapper;
 public interface RoleMapper {
     int save(Role role);
     Role findByName(String name);
-    Role findById(Long id);
 }

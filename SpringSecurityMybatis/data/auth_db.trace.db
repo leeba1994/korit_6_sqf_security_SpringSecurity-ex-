@@ -1,37 +1,10 @@
-2024-08-26 15:18:12 jdbc[3]: exception
+2024-08-26 15:18:25 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USER" already exists; SQL statement:
 CREATE TABLE USER ( id BIGINT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255) UNIQUE not null, password VARCHAR(255) not null, name VARCHAR(255) not null ) [42101-200]
-2024-08-26 15:19:39 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE USER_ROLES ( ID BIGINT AUTO_INCREMENT PRIMARY KEY, USER_ID BIGINT NOT NULL, ROLE_ID BIGINT NOT NULL, )[*]"; expected "identifier"; SQL statement:
-CREATE TABLE USER_ROLES ( id BIGINT AUTO_INCREMENT PRIMARY KEY, user_id BIGINT not null, role_id BIGINT not null, ) [42001-200]
-2024-08-26 15:20:11 jdbc[3]: exception
+2024-08-26 15:19:54 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "ROLE" already exists; SQL statement:
 CREATE TABLE ROLE ( id BIGINT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255) UNIQUE not null ) [42101-200]
-2024-08-26 17:27:02 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "ALTER TABLE USER MODIFY[*] ID BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY"; expected "., ADD, SET, RENAME, DROP, ALTER"; SQL statement:
-alter table user modify id BIGINT not null auto_increment primary key [42001-200]
-2024-08-26 17:27:19 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "ALTER TABLE USER MODIFY[*] ID BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY"; expected "., ADD, SET, RENAME, DROP, ALTER"; SQL statement:
-alter table user modify id bigint not null auto_increment primary key [42001-200]
-2024-08-26 17:27:26 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "ALTER TABLE USER MODIFY[*] `ID`BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY"; expected "., ADD, SET, RENAME, DROP, ALTER"; SQL statement:
-alter table user modify `id`bigint not null auto_increment primary key [42001-200]
-2024-08-26 17:27:28 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "ALTER TABLE USER MODIFY[*] `ID` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY"; expected "., ADD, SET, RENAME, DROP, ALTER"; SQL statement:
-alter table user modify `id` bigint not null auto_increment primary key [42001-200]
-2024-08-26 17:27:39 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "ALTER TABLE USER MODIFY[*] `USER`.`ID` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY"; expected "., ADD, SET, RENAME, DROP, ALTER"; SQL statement:
-alter table user modify `user`.`id` bigint not null auto_increment primary key [42001-200]
-2024-08-26 17:27:46 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "ALTER TABLE USER MODIFY[*] `AUTH_DB`.`USER`.`ID` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY"; expected "., ADD, SET, RENAME, DROP, ALTER"; SQL statement:
-alter table user modify `auth_db`.`user`.`id` bigint not null auto_increment primary key [42001-200]
-2024-08-26 17:35:44 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE USER ( ID BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY, USERNAME VARCHAR(255) UNIQUE NOT NULL, PASSWORD VARCHAR(255) NOT NULL, NAME VARCHAR(255) NOT NULL, )[*]"; expected "identifier"; SQL statement:
-CREATE TABLE USER ( id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255) UNIQUE NOT NULL, password VARCHAR(255) not null, name VARCHAR(255) not null, ) [42001-200]
-2024-08-26 17:35:59 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USER" not found; SQL statement:
-DROP TABLE USER [42102-200]
-2024-08-26 17:39:44 jdbc[3]: exception
+2024-08-26 17:39:43 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Invalid parameter count for "VALUES", expected count: "1"; SQL statement:
 INSERT INTO ROLE VALUES(DEFAULT, 'ROLE_USER'), VALUES(DEFAULT, 'ROLE_MANAGER'), VALUES(DEFAULT, 'ROLE_ADMIN') [7001-200]
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:453)
@@ -92,67 +65,344 @@ INSERT INTO ROLE VALUES(DEFAULT, 'ROLE_USER'), VALUES(DEFAULT, 'ROLE_MANAGER'), 
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
 	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49)
-2024-08-26 17:40:37 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Invalid parameter count for "VALUES", expected count: "1"; SQL statement:
-INSERT INTO ROLE VALUES(1, 'ROLE_USER'), VALUES(2, 'ROLE_MANAGER'), VALUES(3, 'ROLE_ADMIN') [7001-200]
+2024-08-27 14:49:25 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT
+            U.ID AS USER_ID
+            U[*].USERNAME,
+            U.PASSWORD,
+            U.NAME,
+            UR.ID AS USER_ROLES_ID
+            UR.USER_ID AS UR_USER_ID,
+            UR.ROLE_ID AS UR_ROLE_ID
+            R.ID AS ROLE_ID
+            R.NAME AS ROLE_NAME
+        FROM
+            USER U
+            LEFT OUTER JOIN USER_ROLES UR ON(UR.USER_ID = U.ID)
+            LEFT OUTER JOIN ROLE R ON(R.ID = UR.ROLE_ID)
+        WHERE
+            U.NAME = ?"; SQL statement:
+select
+            u.id as user_id
+            u.username,
+            u.password,
+            u.name,
+            ur.id as user_roles_id
+            ur.user_id as ur_user_id,
+            ur.role_id as ur_role_id
+            r.id as role_id
+            r.name as role_name
+        from
+            user u
+            left outer join user_roles ur on(ur.user_id = u.id)
+            left outer join role r on(r.id = ur.role_id)
+        where
+            u.name = ? [42000-200]
+2024-08-27 14:50:47 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT
+            U.ID AS USER_ID
+            U[*].USERNAME,
+            U.PASSWORD,
+            U.NAME,
+            UR.ID AS USER_ROLES_ID
+            UR.USER_ID AS UR_USER_ID,
+            UR.ROLE_ID AS UR_ROLE_ID
+            R.ID AS ROLE_ID
+            R.NAME AS ROLE_NAME
+        FROM
+            USER U
+            LEFT OUTER JOIN USER_ROLES UR ON(UR.USER_ID = U.ID)
+            LEFT OUTER JOIN ROLE R ON(R.ID = UR.ROLE_ID)
+        WHERE
+            U.NAME = ?"; SQL statement:
+select
+            u.id as user_id
+            u.username,
+            u.password,
+            u.name,
+            ur.id as user_roles_id
+            ur.user_id as ur_user_id,
+            ur.role_id as ur_role_id
+            r.id as role_id
+            r.name as role_name
+        from
+            user u
+            left outer join user_roles ur on(ur.user_id = u.id)
+            left outer join role r on(r.id = ur.role_id)
+        where
+            u.name = ? [42000-200]
+2024-08-27 14:51:20 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT
+            U.ID AS USER_ID
+            U[*].USERNAME,
+            U.PASSWORD,
+            U.NAME,
+            UR.ID AS USER_ROLES_ID
+            UR.USER_ID AS UR_USER_ID,
+            UR.ROLE_ID AS UR_ROLE_ID
+            R.ID AS ROLE_ID
+            R.NAME AS ROLE_NAME
+        FROM
+            USER U
+            LEFT OUTER JOIN USER_ROLES UR ON(UR.USER_ID = U.ID)
+            LEFT OUTER JOIN ROLE R ON(R.ID = UR.ROLE_ID)
+        WHERE
+            U.NAME = ?"; SQL statement:
+select
+            u.id as user_id
+            u.username,
+            u.password,
+            u.name,
+            ur.id as user_roles_id
+            ur.user_id as ur_user_id,
+            ur.role_id as ur_role_id
+            r.id as role_id
+            r.name as role_name
+        from
+            user u
+            left outer join user_roles ur on(ur.user_id = u.id)
+            left outer join role r on(r.id = ur.role_id)
+        where
+            u.name = ? [42000-200]
+2024-08-27 21:44:36 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "UDATE[*] USER_ROLES
+SET USER_ID = 1
+WHERE USER_ID = 8"; expected "UPDATE, USE"; SQL statement:
+udate USER_ROLES
+set USER_ID = 1
+where USER_ID = 8 [42001-200]
+2024-08-27 21:47:30 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Column "USER_ROLES_ID" not found; SQL statement:
+update user_roles
+set role_id = 1
+where user_roles_id = 0 [42122-200]
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:453)
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)
 	at org.h2.message.DbException.get(DbException.java:205)
-	at org.h2.expression.function.Function.addParameter(Function.java:653)
-	at org.h2.command.Parser.readFunctionParameters(Parser.java:3962)
-	at org.h2.command.Parser.readKeywordFunction(Parser.java:4101)
-	at org.h2.command.Parser.readTerm(Parser.java:4429)
-	at org.h2.command.Parser.readFactor(Parser.java:3343)
-	at org.h2.command.Parser.readSum(Parser.java:3330)
-	at org.h2.command.Parser.readConcat(Parser.java:3305)
-	at org.h2.command.Parser.readCondition(Parser.java:3108)
-	at org.h2.command.Parser.readExpression(Parser.java:3059)
-	at org.h2.command.Parser.parseValuesForCommand(Parser.java:1881)
-	at org.h2.command.Parser.parseInsertGivenTable(Parser.java:1817)
-	at org.h2.command.Parser.parseInsert(Parser.java:1749)
-	at org.h2.command.Parser.parsePrepared(Parser.java:954)
-	at org.h2.command.Parser.parse(Parser.java:843)
-	at org.h2.command.Parser.parse(Parser.java:815)
-	at org.h2.command.Parser.prepareCommand(Parser.java:738)
+	at org.h2.message.DbException.get(DbException.java:181)
+	at org.h2.expression.ExpressionColumn.getColumnException(ExpressionColumn.java:163)
+	at org.h2.expression.ExpressionColumn.optimize(ExpressionColumn.java:145)
+	at org.h2.expression.condition.Comparison.optimize(Comparison.java:190)
+	at org.h2.command.dml.Update.prepare(Update.java:266)
+	at org.h2.command.Parser.prepareCommand(Parser.java:744)
 	at org.h2.engine.Session.prepareLocal(Session.java:657)
 	at org.h2.engine.Session.prepareCommand(Session.java:595)
 	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1235)
 	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:212)
 	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:201)
-	at com.zaxxer.hikari.pool.ProxyStatement.execute(ProxyStatement.java:94)
-	at com.zaxxer.hikari.pool.HikariProxyStatement.execute(HikariProxyStatement.java)
-	at org.springframework.jdbc.datasource.init.ScriptUtils.executeSqlScript(ScriptUtils.java:261)
-	at org.springframework.jdbc.datasource.init.ResourceDatabasePopulator.populate(ResourceDatabasePopulator.java:254)
-	at org.springframework.jdbc.datasource.init.DatabasePopulatorUtils.execute(DatabasePopulatorUtils.java:54)
-	at org.springframework.boot.jdbc.init.DataSourceScriptDatabaseInitializer.runScripts(DataSourceScriptDatabaseInitializer.java:90)
-	at org.springframework.boot.sql.init.AbstractScriptDatabaseInitializer.runScripts(AbstractScriptDatabaseInitializer.java:145)
-	at org.springframework.boot.sql.init.AbstractScriptDatabaseInitializer.applyScripts(AbstractScriptDatabaseInitializer.java:107)
-	at org.springframework.boot.sql.init.AbstractScriptDatabaseInitializer.applySchemaScripts(AbstractScriptDatabaseInitializer.java:97)
-	at org.springframework.boot.sql.init.AbstractScriptDatabaseInitializer.initializeDatabase(AbstractScriptDatabaseInitializer.java:75)
-	at org.springframework.boot.sql.init.AbstractScriptDatabaseInitializer.afterPropertiesSet(AbstractScriptDatabaseInitializer.java:65)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1863)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1800)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:620)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:953)
-	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:918)
-	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:583)
-	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:145)
-	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:740)
-	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:415)
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:303)
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1312)
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1301)
-	at com.study.SpringSecurityMybatis.SpringSecurityMybatisApplication.main(SpringSecurityMybatisApplication.java:10)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
-	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49)
-2024-08-29 11:30:13 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "ALTER TABLE `USER` ADD COLUMN 'email'[*] VARCHAR(255) NOT NULL"; expected "identifier"; SQL statement:
-ALTER TABLE `USER` ADD COLUMN 'email' VARCHAR(255) NOT NULL [42001-200]
+	at org.h2.server.web.WebApp.getResult(WebApp.java:1459)
+	at org.h2.server.web.WebApp.query(WebApp.java:1116)
+	at org.h2.server.web.WebApp.query(WebApp.java:1092)
+	at org.h2.server.web.WebApp.process(WebApp.java:241)
+	at org.h2.server.web.WebApp.processRequest(WebApp.java:173)
+	at org.h2.server.web.WebServlet.doGet(WebServlet.java:129)
+	at org.h2.server.web.WebServlet.doPost(WebServlet.java:166)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:681)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:764)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:227)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at com.study.SpringSecurityMybatis.security.filter.JwtAccessTokenFilter.doFilter(JwtAccessTokenFilter.java:35)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:327)
+	at org.springframework.security.web.access.intercept.FilterSecurityInterceptor.invoke(FilterSecurityInterceptor.java:115)
+	at org.springframework.security.web.access.intercept.FilterSecurityInterceptor.doFilter(FilterSecurityInterceptor.java:81)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:122)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:126)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:81)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:109)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:149)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at com.study.SpringSecurityMybatis.security.filter.JwtAccessTokenFilter.doFilter(JwtAccessTokenFilter.java:35)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:103)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:89)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:110)
+	at org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:80)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:55)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:211)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:183)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:354)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:267)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:197)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:97)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:541)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:135)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:78)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:360)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:399)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:889)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:834)
+2024-08-27 21:48:47 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "UPDATE USER_ROLES
+SET ROLE_ID
+WHERE[*] USER_ID = 0"; expected "., ="; SQL statement:
+update user_roles
+set role_id
+where user_id = 0 [42001-200]
+2024-08-27 21:49:04 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "UPDATE USER_ROLES
+SET ROLE_ID
+WHERE[*] USER_ID=0"; expected "., ="; SQL statement:
+update user_roles
+set role_id
+where user_id=0 [42001-200]
+2024-08-27 21:49:10 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "UPDATE USER_ROLES
+SET ROLE_ID
+WHERE[*] USER_ID=1"; expected "., ="; SQL statement:
+update user_roles
+set role_id
+where user_id=1 [42001-200]
+2024-08-27 21:50:22 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Column "ROLES_ID" not found; SQL statement:
+update user_roles
+set role_id = 1
+where roles_id = 0 [42122-200]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:453)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)
+	at org.h2.message.DbException.get(DbException.java:205)
+	at org.h2.message.DbException.get(DbException.java:181)
+	at org.h2.expression.ExpressionColumn.getColumnException(ExpressionColumn.java:163)
+	at org.h2.expression.ExpressionColumn.optimize(ExpressionColumn.java:145)
+	at org.h2.expression.condition.Comparison.optimize(Comparison.java:190)
+	at org.h2.command.dml.Update.prepare(Update.java:266)
+	at org.h2.command.Parser.prepareCommand(Parser.java:744)
+	at org.h2.engine.Session.prepareLocal(Session.java:657)
+	at org.h2.engine.Session.prepareCommand(Session.java:595)
+	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1235)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:212)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:201)
+	at org.h2.server.web.WebApp.getResult(WebApp.java:1459)
+	at org.h2.server.web.WebApp.query(WebApp.java:1116)
+	at org.h2.server.web.WebApp.query(WebApp.java:1092)
+	at org.h2.server.web.WebApp.process(WebApp.java:241)
+	at org.h2.server.web.WebApp.processRequest(WebApp.java:173)
+	at org.h2.server.web.WebServlet.doGet(WebServlet.java:129)
+	at org.h2.server.web.WebServlet.doPost(WebServlet.java:166)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:681)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:764)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:227)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at com.study.SpringSecurityMybatis.security.filter.JwtAccessTokenFilter.doFilter(JwtAccessTokenFilter.java:35)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:327)
+	at org.springframework.security.web.access.intercept.FilterSecurityInterceptor.invoke(FilterSecurityInterceptor.java:115)
+	at org.springframework.security.web.access.intercept.FilterSecurityInterceptor.doFilter(FilterSecurityInterceptor.java:81)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:122)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:126)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:81)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:109)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:149)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at com.study.SpringSecurityMybatis.security.filter.JwtAccessTokenFilter.doFilter(JwtAccessTokenFilter.java:35)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:103)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:89)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:110)
+	at org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:80)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:55)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:211)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:183)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:354)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:267)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:197)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:97)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:541)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:135)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:78)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:360)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:399)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:889)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:834)
+2024-08-29 11:29:41 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "ALTER TABLE 'USER'[*] ADD COLUMN EMAIL VARCHAR(255) NOT NULL"; expected "identifier"; SQL statement:
+ALTER TABLE 'USER' ADD COLUMN email VARCHAR(255) NOT NULL [42001-200]
+2024-08-29 11:30:23 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "ALTER TABLE 'USER'[*] ADD COLUMN 'email' VARCHAR(255) NOT NULL"; expected "identifier"; SQL statement:
+ALTER TABLE 'USER' ADD COLUMN 'email' VARCHAR(255) NOT NULL [42001-200]

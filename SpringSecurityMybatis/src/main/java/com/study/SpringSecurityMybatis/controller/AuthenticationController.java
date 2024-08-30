@@ -10,7 +10,6 @@ import com.study.SpringSecurityMybatis.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,30 +27,18 @@ public class AuthenticationController {
     private TokenService tokenService;
 
     @ValidAop
-    @PostMapping("/auth/signup")
+    @PostMapping("/auth/signup") // 디스패처가 signup을 호출하기 전에 valid와 bindingResult가 있으면 ReqSignupDto, BindingResult 정의해 놓고, 메소드가 호출되면 값을 넣음
     public ResponseEntity<?> signup(@Valid @RequestBody ReqSignupDto dto, BindingResult bindingResult) throws SignupException {
         return ResponseEntity.ok().body(userService.insertUserAndUserRoles(dto));
     }
 
-    @ValidAop
     @PostMapping("/auth/signin")
     public ResponseEntity<?> signin(@Valid @RequestBody ReqSigninDto dto, BindingResult bindingResult) {
         return ResponseEntity.ok().body(userService.getGeneratedAccessToken(dto));
     }
 
-    @GetMapping("/auth/access")
+    @GetMapping("/auth/access") //accessToken 유효성 검사(로그인 상태 검증)
     public ResponseEntity<?> access(ReqAccessDto dto) {
         return ResponseEntity.ok().body(tokenService.isValidAccessToken(dto.getAccessToken()));
     }
-
 }
-
-
-
-
-
-
-
-
-
-

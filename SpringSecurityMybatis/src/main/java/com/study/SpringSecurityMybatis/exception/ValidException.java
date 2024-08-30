@@ -7,10 +7,13 @@ import java.util.List;
 
 @Data
 public class ValidException extends RuntimeException {
+
     private List<FieldError> fieldErrors;
 
     public ValidException(String message, List<FieldError> fieldErrors) {
         super(message);
         this.fieldErrors = fieldErrors;
     }
+
+
 }
